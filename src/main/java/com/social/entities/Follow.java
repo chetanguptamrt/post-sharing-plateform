@@ -29,7 +29,6 @@ public class Follow {
 
 	public Follow() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Follow(int id, User followByUser, User followedToUser) {

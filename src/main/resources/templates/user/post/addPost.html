@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{user/base :: layout(~{::section})}">
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+	<section>
+		<div class="pt-5">
+		    <div class="bg-white pt-5 pb-5 pl-3 pr-3 m-0 row">
+		    	<div class="col-md-8 offset-md-2">
+			    	<h2 class="text-center m-0">Add Post</h2>
+			    	<div class="text-center mb-3">
+			    		<small style="display:none;" id="status"></small>
+			    	</div>
+			    	<form id="addPost">
+			    		<div class="post">
+				    		<textarea rows="5" class="form-control textarea-resize-none post-textarea" placeholder="Write something here..." name="caption"></textarea>
+				    		<input type="file" accept="image/jpeg,image/png,image/gif,video/mp4,video/x-ms-wmv,video/avi" id="media" name="media" class="form-control border-0" required="required"/>
+				    		<small class="mb-3">Note - Only JPG, JPEG, PNG, GIF, MP4, WMV, AVI file accepted.</small>
+				    		<div class="text-center mt-3 mb-3">
+				    			<button class="btn btn-primary btn-sm" type="submit">Publish</button>
+				    			<button class="btn btn-danger pl-3 pr-3 btn-sm" type="reset">Reset</button>
+				    		</div>
+			    		</div>
+			    	</form>
+		    	</div>
+		    </div>
+	    </div>
+	    <script th:src="@{/js/postScript.js}"></script>
+	</section>
+</body>
+</html>

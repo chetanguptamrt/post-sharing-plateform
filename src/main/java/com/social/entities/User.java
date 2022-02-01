@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -27,14 +26,6 @@ public class User {
 	
 	@Column(name = "last_name")
 	private String lastName;
-	
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
 
 	private String email;
 	
@@ -63,12 +54,20 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> posts;
 	
-	@ManyToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Like> likes;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<FollowRequest> sendFollowRequests;
+
+	@OneToMany(mappedBy = "userWhoSend", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<FollowRequest> receiveFollowRequests;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Notification> notifications;
 
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public User(int id, String firstName, String lastName, String email, String userName, String password, String role,
@@ -99,6 +98,14 @@ public class User {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+	
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {
@@ -189,12 +196,35 @@ public class User {
 		this.likes = likes;
 	}
 
+	public List<FollowRequest> getSendFollowRequests() {
+		return sendFollowRequests;
+	}
+
+	public void setSendFollowRequests(List<FollowRequest> sendFollowRequests) {
+		this.sendFollowRequests = sendFollowRequests;
+	}
+
+	public List<FollowRequest> getReceiveFollowRequests() {
+		return receiveFollowRequests;
+	}
+
+	public void setReceiveFollowRequests(List<FollowRequest> receiveFollowRequests) {
+		this.receiveFollowRequests = receiveFollowRequests;
+	}
+
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", userName=" + userName + ", password=" + password + ", role=" + role + ", joiningDate="
-				+ joiningDate + ", active=" + active + ", userData=" + userData + ", followers=" + followers
-				+ ", following=" + following + ", posts=" + posts + ", likes=" + likes + "]";
+				+ joiningDate + ", active=" + active + "]";
 	}
 
 }

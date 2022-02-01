@@ -18,7 +18,6 @@ public class AccountActivation {
 
 	public AccountActivation() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public AccountActivation(int id, String email, String otp) {

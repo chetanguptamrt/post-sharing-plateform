@@ -7,5 +7,13 @@ import com.social.entities.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
+
+	public User getUserByEmailOrUserName(String email, String userName);
+
+	public User getUserByEmail(String email);
+
+	public boolean existsByEmail(String email);
+
+	public User getUserByUserName(String userName);
 	
 }

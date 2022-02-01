@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -29,8 +30,11 @@ public class Post {
 	
 	@Column(name = "path_of_post")
 	private String pathOfPost;
+	
+	private boolean edit;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL)
@@ -38,10 +42,9 @@ public class Post {
 
 	public Post() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Post(int id, Date date, String format, String caption, String pathOfPost, User user) {
+	public Post(int id, Date date, String format, String caption, String pathOfPost, User user, Boolean edit) {
 		super();
 		this.id = id;
 		this.date = date;
@@ -49,6 +52,15 @@ public class Post {
 		this.caption = caption;
 		this.pathOfPost = pathOfPost;
 		this.user = user;
+		this.edit = edit;
+	}
+
+	public boolean isEdit() {
+		return edit;
+	}
+
+	public void setEdit(boolean edit) {
+		this.edit = edit;
 	}
 
 	public int getId() {
@@ -110,7 +122,7 @@ public class Post {
 	@Override
 	public String toString() {
 		return "Post [id=" + id + ", date=" + date + ", format=" + format + ", caption=" + caption + ", pathOfPost="
-				+ pathOfPost + ", user=" + user + ", likes=" + likes + "]";
+				+ pathOfPost + ", edit=" + edit + ", user=" + user + ", likes=" + likes + "]";
 	}
-	
+
 }

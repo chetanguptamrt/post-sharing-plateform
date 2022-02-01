@@ -1,6 +1,5 @@
 package com.social.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,36 +9,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name = "user_likes")
-public class Like {
-
+@Table(name = "follow_request")
+public class FollowRequest {
+	
 	@Id
-	@Column(name = "l_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
-	@JsonIgnore
+	
+	@JoinColumn(name = "user_id")
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
-	@JsonIgnore
+	@JoinColumn(name = "user_who_send_request_id")
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "post_id", referencedColumnName = "id")
-	private Post post;
+	private User userWhoSend;
 
-	public Like() {
+	public FollowRequest() {
 		super();
 	}
-
-	public Like(int id, User user, Post post) {
+	
+	public FollowRequest(int id, User user, User userWhoSend) {
 		super();
 		this.id = id;
 		this.user = user;
-		this.post = post;
+		this.userWhoSend = userWhoSend;
 	}
 
 	public int getId() {
@@ -58,17 +52,17 @@ public class Like {
 		this.user = user;
 	}
 
-	public Post getPost() {
-		return post;
+	public User getUserWhoSend() {
+		return userWhoSend;
 	}
 
-	public void setPost(Post post) {
-		this.post = post;
+	public void setUserWhoSend(User userWhoSend) {
+		this.userWhoSend = userWhoSend;
 	}
 
 	@Override
 	public String toString() {
-		return "Like [id=" + id + ", user=" + user + ", post=" + post + "]";
+		return "FollowRequest [id=" + id + ", user=" + user + ", userWhoSend=" + userWhoSend + "]";
 	}
 
 }
