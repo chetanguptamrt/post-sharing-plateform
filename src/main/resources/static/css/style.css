@@ -70,6 +70,11 @@ body {
 .post-textarea:focus{
 	box-shadow: none
 }
+.profile-img{
+	width: 130px;
+	border: 2px solid black;
+	border-radius: 50%;	
+}
 @media only screen and (max-width: 782px){
 	.nav-link-name{
 		display: none;
@@ -90,5 +95,27 @@ body {
 	}
 	.content{
 		margin-bottom: 52px;
+	}
+}
+@media only screen and (max-width: 500px){
+	.profile-img{
+		width: 100px;
+	}
+	.profile-name{
+		font-size: 24px
+	}
+}
+@media only screen and (max-width: 400px){
+	.profile-img{
+		width: 90px;
+	}
+	.profile-name{
+		font-size: 22px
+	}
+	.profile-button button{
+		font-size: 13px
+	}
+	.profile-button a{
+		font-size: 13px
 	}
 }

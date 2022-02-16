@@ -9,4 +9,6 @@ public interface PostRepository extends JpaRepository<Post, Integer>{
 
 	public Post getByIdAndUser(int postId, User user);
 
+	public long countByUser(User user);
+
 }

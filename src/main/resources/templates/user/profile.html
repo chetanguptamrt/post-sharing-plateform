@@ -6,17 +6,133 @@
 <body>
 	<section>
 		<div class="bg-white pt-5 pb-5">
-			<div class="row">
-				<div class="col-6 text-center">
-					<img style="width: 130px; border: 2px solid black; border-radius: 50%;" th:src="@{|/img/profile/${profileUserProfile}}" alt="" />
+			<div class="row m-0">
+				<div class="col-5 text-center">
+					<img class="profile-img" th:src="@{|/img/profile/${profileUserData.profileImagePath}}" alt="img" />
 				</div>
-				<div class="col-6">
-					<label th:text="${'@'+profileUser.userName}"></label>
-					<h3 th:text="${profileUser.firstName+' '+profileUser.lastName}"></h3>
+				<div class="col-7">
+					<label class="mb-0" th:text="${'@'+profileUser.userName}"></label>
+					<h3 class="profile-name" th:text="${profileUser.firstName+' '+profileUser.lastName}"></h3>
+					<div class="profile-button">
+					  	<div th:styleappend="${followOption!=1}?'display:none'" id="f-case-1">
+					  		<button class="btn btn-sm btn-primary mr-2" th:attr="onclick=|doUnfollow('${profileUser.userName}')|">Unfollow</button>
+					  		<button class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#aboutModal">About</button>	
+					  	</div>
+					  	<div th:styleappend="${followOption!=2}?'display:none'" id="f-case-2">
+					  		<button class="btn btn-sm btn-secondary" th:attr="onclick=|cancelFollowRequest('${profileUser.userName}')|">Cancel Request</button>	
+					  	</div>
+					  	<div th:styleappend="${followOption!=3}?'display:none'" id="f-case-3">
+					  		<button class="btn btn-sm btn-primary mr-2" th:attr="onclick=|doFollow('${profileUser.userName}')|">Follow</button>
+					  		<button class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#aboutModal">About</button>	
+					  	</div>
+					  	<div th:styleappend="${followOption!=4}?'display:none'" id="f-case-4">
+					  		<button class="btn btn-sm btn-primary" id="follow" th:attr="onclick=|doFollow('${profileUser.userName}')|">Follow</button>	
+					  	</div>
+					  	<div th:styleappend="${followOption!=5}?'display:none'" id="f-case-5">
+					  		<button class="btn btn-sm btn-secondary mr-2" data-toggle="modal" data-target="#aboutModal">About</button>
+					  		<a class="btn btn-sm btn-primary" th:href="@{/setting}">Settings</a>	
+					  	</div>
+					</div>
 				</div>
 			</div>
-			<p>bio</p>
+			<p class="mt-1 ml-3 mr-2 mb-0" th:text="${profileUserData.bio}"></p>
+			<hr class="mt-2 ml-3 mr-3 mb-1" />
+			<div class="row m-0">
+				<div class="col-4 text-center"><span th:text="${totalPost}"></span><br />Post</div>
+				<div data-toggle="modal" data-target="#followersModal" style="cursor: pointer;" th:attr="onclick=|getUserFollowers(${followOption==1||followOption==3||followOption==5},'${profileUser.userName}')|" class="col-4 text-center">
+					<span th:text="${totalFollowers}"></span><br />Followers
+				</div>
+				<div data-toggle="modal" data-target="#followingModal" style="cursor: pointer;" th:attr="onclick=|getUserFollowing(${followOption==1||followOption==3||followOption==5},'${profileUser.userName}')|" class="col-4 text-center">
+					<span th:text="${totalFollowing}"></span><br />Following
+				</div>
+			</div>
+			<hr class="mb-3 ml-3 mr-3 mt-1" />
+			<div th:if="${showPost}" class="row m-0">
+				<div class="col-4">
+					we
+				</div>
+				<div class="col-4">
+					we
+				</div>
+				<div class="col-4">
+					we
+				</div>
+			</div>
+			<div th:unless="${showPost}">
+				<div class="pl-3 pr-3 m-2 pt-4 pb-4">
+					<div class="text-center" style="font-size: 48px;"><i class="fa fa-lock" aria-hidden="true"></i></div>
+					<h3 class="text-center">Account is private</h3>
+				</div>
+			</div>
 		</div>
+				
+		<div th:if="${followOption==1||followOption==3||followOption==5}">
+			<div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+			  	<div class="modal-dialog">
+				    <div class="modal-content">
+				      	<div class="modal-header">
+				        	<h5 class="modal-title" id="exampleModalLabel">About</h5>
+				        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          		<span aria-hidden="true">&times;</span>
+				        	</button>
+				      	</div>
+				      	<div class="modal-body">
+				        	<h4 class="text-center mb-0" th:text="${profileUser.firstName+' '+profileUser.lastName}"></h4>
+				        	<div class="text-center mb-1">
+				        		<small style="color: #6c757d;">Joining date: <span th:text="${#dates.format(profileUser.joiningDate,'dd MMM yyyy')}"></span></small>
+				        	</div>
+				        	<div th:if="${profileUser.userData.showDateOfBirth && profileUser.userData.dateOfBirth}">
+				        		<label>Date Of Birth: <span th:text="${profileUser.userData.dateOfBirth}"></span></label>
+				        	</div>
+				        	<div th:if="${profileUser.userData.showEmail && profileUser.email!=''}">
+				        		<label>Email: <span th:text="${profileUser.email}"></span></label>
+				        	</div>
+				        	<div th:if="${profileUser.userData.showPhone && profileUser.userData.phone!=''}">
+				        		<label>Phone: <span th:text="${profileUser.userData.phone}"></span></label>
+				        	</div>
+				        	<label>Account Mode: <span th:text="${profileUser.userData.accountMode}?'Public':'Private'"></span></label>
+				        	<label th:if="${profileUser.userData.gender!='no' && profileUser.userData.gender!=''}">Gender: <span th:text="${profileUser.userData.gender=='male'}?'Male':'Female'"></span></label>
+				      	</div>
+			    	</div>
+			  	</div>
+			</div>
+			<div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
+			  	<div class="modal-dialog">
+				    <div class="modal-content">
+				      	<div class="modal-header">
+				        	<h5 class="modal-title" id="exampleModalLabel">Followers</h5>
+				        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          		<span aria-hidden="true">&times;</span>
+				        	</button>
+				      	</div>
+				      	<div class="modal-body" id="show-followers">
+				        	<div class="text-center">
+				        		<small style="color: gray;">Please wait...</small>
+				        	</div>
+				      	</div>
+			    	</div>
+			  	</div>
+			</div>
+			<div class="modal fade" id="followingModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
+			  	<div class="modal-dialog">
+				    <div class="modal-content">
+				      	<div class="modal-header">
+				        	<h5 class="modal-title" id="exampleModalLabel">Following</h5>
+				        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          		<span aria-hidden="true">&times;</span>
+				        	</button>
+				      	</div>
+				      	<div class="modal-body" id="show-following">
+				        	<div class="text-center">
+				        		<small style="color: gray;">Please wait...</small>
+				        	</div>
+				      	</div>
+			    	</div>
+			  	</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" th:src="@{/js/profileScript.js}"></script>
 	</section>
 </body>
 </html>

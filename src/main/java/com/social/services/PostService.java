@@ -40,6 +40,10 @@ public class PostService {
 	@Autowired
 	private PostRepository postRepository;
 
+	public long countUserPost(User user) {
+		return this.postRepository.countByUser(user);
+	}
+	
 	public Post getPostById(int id) {
 		return this.postRepository.getById(id);
 	}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.social.entities.User;
 import com.social.entities.UserData;
+import com.social.services.FollowService;
 import com.social.services.ProfileService;
 import com.social.services.UserService;
 
@@ -24,6 +25,9 @@ public class HomeController {
 	
 	@Autowired
 	private ProfileService profileService;
+	
+	@Autowired
+	private FollowService followService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Principal principal, Model model) {
@@ -38,6 +42,34 @@ public class HomeController {
 		model.addAttribute("user", userByEmail);
 		model.addAttribute("userProfile", profileImagePath);
 		return "user/home";
+	}
+	
+	@RequestMapping(value = "/people", method = RequestMethod.GET)
+	public String people(@RequestParam(value = "tab", required = false) String tab, Principal principal, Model model) {
+		String name = principal.getName();
+		User userByEmail = this.profileService.getUserByEmail(name);
+		UserData userDataByUser = this.profileService.getUserDataByUser(userByEmail);
+		String profileImagePath = userDataByUser.getProfileImagePath();
+		model.addAttribute("title", "People | Post Sharing");
+		model.addAttribute("user", userByEmail);
+		model.addAttribute("userProfile", profileImagePath);
+		if(tab==null) {
+			tab= "sent";
+		}
+		if(!(tab.equals("received") || tab.equals("followers") || tab.equals("following"))) {
+			tab = "sent";
+		}
+		if(tab.equals("sent")) {
+			model.addAttribute("list", this.followService.getSentFollowRequests(userByEmail));
+		} else if(tab.equals("received")) {
+			model.addAttribute("list", this.followService.getReceivedFollowRequests(userByEmail));
+		}  else if(tab.equals("followers")) {
+			model.addAttribute("list", this.followService.getFollowers(userByEmail));
+		}  else if(tab.equals("following")) {
+			model.addAttribute("list", this.followService.getFollowing(userByEmail));
+		} 
+		model.addAttribute("tab", tab);
+		return "user/people";
 	}
 	
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)

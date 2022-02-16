@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{user/base :: layout(~{::section})}">
+<head>
+    <title>People Page</title>
+</head>
+<body>
+	<section>
+		<div class="bg-white p-3">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+			  	<li class="nav-item" role="presentation">
+			    	<a class="nav-link text-dark" th:classappend="${tab=='sent'||tab=='received'}?'active'" id="home-tab" data-toggle="tab" href="#request" role="tab" aria-controls="request" aria-selected="true">Request</a>
+			  	</li>
+			  	<li class="nav-item" role="presentation">
+			    	<a class="nav-link text-dark" th:classappend="${tab=='followers'||tab=='following'}?'active'" id="profile-tab" data-toggle="tab" href="#follow" role="tab" aria-controls="follow" aria-selected="false">Follow</a>
+			  	</li>
+			</ul>
+			<div class="tab-content mt-2 mb-2" id="myTabContent">
+				<div class="tab-pane fade" th:classappend="${tab=='sent'||tab=='received'}?'show active'" id="request" role="tabpanel" aria-labelledby="request-tab">
+					<a class="btn rounded-pill border" th:classappend="${tab=='sent'}?'btn-primary':'btn-light'" th:href="@{/people?tab=sent}">Sent</a>
+					<a class="btn rounded-pill border" th:classappend="${tab=='received'}?'btn-primary':'btn-light'" th:href="@{/people?tab=received}">Received</a>
+					<br />
+					<div class="mt-2" th:if="${tab=='sent'}"  style="border-top: 1px solid #e8e8e8">
+						<div th:each="l : ${list}">
+							<div class="row m-0 pb-1 pt-1" style="border-bottom: 1px solid #e8e8e8">
+								<div class="col-8">
+									<a style="font-size: 18px; font-weight: 500" class="text-dark text-decoration-none" th:href="|/u/${l.user.userName}" target="_blank" >
+										<img class="rounded-circle border mr-2" style="width: 42px" th:src="@{|/img/profile/50x50_${l.user.userData.profileImagePath}}" alt="img" />
+										<span th:text="${l.user.firstName+' '+l.user.lastName}"></span>
+									</a>
+								</div>
+								<div class="col-4 text-right">
+									<button class="btn btn-sm btn-outline-dark mt-1" th:attr="onclick=|cancelFollowRequest('${l.user.userName}')|">Cancel</button>
+								</div>
+							</div>
+						</div>
+						<div th:if="${list.size!=0}" class="text-center mt-2">
+							<small class="text-dark">End of the list</small>
+						</div>
+					</div>
+					<div class="mt-2" th:if="${tab=='received'}" style="border-top: 1px solid #e8e8e8">
+						<div th:each="l : ${list}">
+							<div class="row m-0 pb-1 pt-1" style="border-bottom: 1px solid #e8e8e8">
+								<div class="col-8">
+									<a style="font-size: 18px; font-weight: 500" class="text-dark text-decoration-none" th:href="|/u/${l.userWhoSend.userName}" target="_blank" >
+										<img class="rounded-circle border mr-2" style="width: 42px" th:src="@{|/img/profile/50x50_${l.userWhoSend.userData.profileImagePath}}" alt="img" />
+										<span th:text="${l.userWhoSend.firstName+' '+l.userWhoSend.lastName}"></span>
+									</a>
+								</div>
+								<div class="col-4 text-right">
+									<button class="btn btn-sm btn-outline-primary mt-1" th:attr="onclick=|acceptFollowRequest('${l.userWhoSend.userName}')|">Accept</button>
+									<button class="btn btn-sm mt-1" th:attr="onclick=|declineFollowRequest('${l.userWhoSend.userName}')|">X</button>
+								</div>
+							</div>
+						</div>
+						<div th:if="${list.size!=0}" class="text-center mt-2">
+							<small class="text-dark">End of the list</small>
+						</div>
+					</div>
+					<div class="mt-3 mb-3" th:if="${tab=='sent'&&list.size==0}">
+						<div class="text-center" style="font-size: 38px;">
+							<i class="fa fa-frown-o text-warning" aria-hidden="true"></i>
+							<h4 class="text-center">No Sent Request</h4>
+						</div>
+					</div>
+					<div class="mt-3 mb-3" th:if="${tab=='received'&&list.size==0}">
+						<div class="text-center" style="font-size: 38px;">
+							<i class="fa fa-frown-o text-warning" aria-hidden="true"></i>
+							<h4 class="text-center">No Received Request</h4>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade" th:classappend="${tab=='followers'||tab=='following'}?'show active'" id="follow" role="tabpanel" aria-labelledby="follow-tab">
+					<a class="btn rounded-pill border" th:href="@{/people?tab=followers}" th:classappend="${tab=='followers'}?'btn-primary':'btn-light'">Followers</a>
+					<a class="btn rounded-pill border" th:href="@{/people?tab=following}" th:classappend="${tab=='following'}?'btn-primary':'btn-light'">Following</a>
+					<br />
+					<div class="mt-2" th:if="${tab=='followers'}"  style="border-top: 1px solid #e8e8e8">
+						<div th:each="l : ${list}">
+							<div class="row m-0 pb-1 pt-1" style="border-bottom: 1px solid #e8e8e8">
+								<div class="col-8">
+									<a style="font-size: 18px; font-weight: 500" class="text-dark text-decoration-none" th:href="|/u/${l.followByUser.userName}" target="_blank" >
+										<img class="rounded-circle border mr-2" style="width: 42px" th:src="@{|/img/profile/50x50_${l.followByUser.userData.profileImagePath}}" alt="img" />
+										<span th:text="${l.followByUser.firstName+' '+l.followByUser.lastName}"></span>
+									</a>
+								</div>
+								<div class="col-4 text-right">
+									<button class="btn btn-sm btn-outline-dark mt-1" th:attr="onclick=|removeFollower('${l.followByUser.userName}')|">Remove</button>
+								</div>
+							</div>
+						</div>
+						<div th:if="${list.size!=0}" class="text-center mt-2">
+							<small class="text-dark">End of the list</small>
+						</div>
+					</div>
+					<div class="mt-2" th:if="${tab=='following'}"  style="border-top: 1px solid #e8e8e8">
+						<div th:each="l : ${list}">
+							<div class="row m-0 pb-1 pt-1" style="border-bottom: 1px solid #e8e8e8">
+								<div class="col-8">
+									<a style="font-size: 18px; font-weight: 500" class="text-dark text-decoration-none" th:href="|/u/${l.followedToUser.userName}" target="_blank" >
+										<img class="rounded-circle border mr-2" style="width: 42px" th:src="@{|/img/profile/50x50_${l.followedToUser.userData.profileImagePath}}" alt="img" />
+										<span th:text="${l.followedToUser.firstName+' '+l.followedToUser.lastName}"></span>
+									</a>
+								</div>
+								<div class="col-4 text-right">
+									<button class="btn btn-sm btn-outline-dark mt-1" th:attr="onclick=|doUnfollow('${l.followedToUser.userName}')|">Unfollow</button>
+								</div>
+							</div>
+						</div>
+						<div th:if="${list.size!=0}" class="text-center mt-2">
+							<small class="text-dark">End of the list</small>
+						</div>
+					</div>
+					<div class="mt-3 mb-3" th:if="${tab=='followers'&&list.size==0}">
+						<div class="text-center" style="font-size: 38px;">
+							<i class="fa fa-frown-o text-warning" aria-hidden="true"></i>
+							<h4 class="text-center">No Followers</h4>
+						</div>
+					</div>
+					<div class="mt-3 mb-3" th:if="${tab=='following'&&list.size==0}">
+						<div class="text-center" style="font-size: 38px;">
+							<i class="fa fa-frown-o text-warning" aria-hidden="true"></i>
+							<h4 class="text-center">No Following</h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" th:src="@{/js/peopleScript.js}"></script>
+	</section>
+</body>
+</html>
