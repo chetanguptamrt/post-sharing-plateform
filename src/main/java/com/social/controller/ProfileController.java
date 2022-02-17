@@ -62,19 +62,21 @@ public class ProfileController {
 		boolean showPost = false; 
 		User userByUserName = this.profileService.getUserByUserName(username);
 		UserData userDataByUserName = this.profileService.getUserDataByUser(userByUserName);
+		User userByEmail = null;
+		if(principal!=null) {
+			String name = principal.getName();
+			userByEmail = this.profileService.getUserByEmail(name);
+			UserData userDataByUser = this.profileService.getUserDataByUser(userByEmail);
+			String profileImagePath = userDataByUser.getProfileImagePath();
+			model.addAttribute("user", userByEmail);
+			model.addAttribute("userProfile", profileImagePath);
+		}
 		if(userByUserName==null) {
 			model.addAttribute("title", "Post Sharing");
 			model.addAttribute("message", "User not found!!");
 			return "error/msg";
 		}
 		if(principal!=null) {
-			String name = principal.getName();
-			User userByEmail = this.profileService.getUserByEmail(name);
-			UserData userDataByUser = this.profileService.getUserDataByUser(userByEmail);
-			String profileImagePath = userDataByUser.getProfileImagePath();
-			model.addAttribute("user", userByEmail);
-			model.addAttribute("userProfile", profileImagePath);
-			
 			if(this.followService.ifFollowed(userByEmail, userByUserName)) {
 				showPost = true;
 				followField = 1;
@@ -100,7 +102,6 @@ public class ProfileController {
 				showPost = false;
 			}
 		}
-		
 		model.addAttribute("title", "Post Sharing");
 		model.addAttribute("profileUser", userByUserName);
 		model.addAttribute("profileUserData", userDataByUserName);

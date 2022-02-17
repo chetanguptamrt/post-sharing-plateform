@@ -1,8 +1,10 @@
 package com.social.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.social.entities.Post;
 import com.social.entities.User;
 import com.social.entities.UserData;
+import com.social.helper.FollowUser;
 import com.social.services.FollowService;
 import com.social.services.LikeService;
 import com.social.services.PostService;
@@ -186,4 +189,18 @@ public class PostController {
 		}
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/post/likes", method = RequestMethod.POST)
+	public ResponseEntity<List<FollowUser>> getUserFollowers(Principal principal, @RequestParam("id") int pId) {
+		if(principal!=null) {
+			User user = this.profileService.getUserByEmail(principal.getName());
+			Post post = this.postService.getPostById(pId);
+			User profileUser = post.getUser();
+			if(this.followService.ifFollowed(user, profileUser) || profileUser.getUserData().isAccountMode() || user.getId()==profileUser.getId()) {
+				List<FollowUser> list = this.likeService.getPostLikes(post);
+				return ResponseEntity.ok(list);
+			}
+		}
+		return ResponseEntity.ok(List.of());
+	}
 }

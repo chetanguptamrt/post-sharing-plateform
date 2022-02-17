@@ -1,5 +1,7 @@
 package com.social.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.social.entities.Like;
@@ -13,5 +15,7 @@ public interface LikeRepository extends JpaRepository<Like, Integer>{
 	public Like getByUserAndPost(User user, Post post);
 
 	public long countByPost(Post post);
+
+	public List<Like> getByPost(Post post);
 
 }
