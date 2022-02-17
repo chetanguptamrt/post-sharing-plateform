@@ -94,5 +94,11 @@
 			</div>
 	    </div>
 	</footer>
+	<script type="text/javascript">
+		$(document).ready(function(){
+		    $('video').bind('contextmenu dragstart',function() { return false; });
+		    $('img').bind('contextmenu dragstart',function() { return false; });
+		});
+	</script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.social.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.social.entities.Post;
 import com.social.entities.User;
 import com.social.entities.UserData;
 import com.social.services.FollowService;
@@ -61,6 +63,7 @@ public class ProfileController {
 		User userByUserName = this.profileService.getUserByUserName(username);
 		UserData userDataByUserName = this.profileService.getUserDataByUser(userByUserName);
 		if(userByUserName==null) {
+			model.addAttribute("title", "Post Sharing");
 			model.addAttribute("message", "User not found!!");
 			return "error/msg";
 		}
@@ -103,6 +106,10 @@ public class ProfileController {
 		model.addAttribute("profileUserData", userDataByUserName);
 		model.addAttribute("followOption", followField);
 		model.addAttribute("showPost", showPost);
+		if(showPost) {
+			List<Post> posts = this.postService.getPostByUser(userByUserName);
+			model.addAttribute("posts", posts);
+		}
 		model.addAttribute("totalPost", this.postService.countUserPost(userByUserName));
 		model.addAttribute("totalFollowers", this.followService.countUserFollowers(userByUserName));
 		model.addAttribute("totalFollowing", this.followService.countUserFollowing(userByUserName));

@@ -1,8 +1,4 @@
 // Select elements here
-$(document).ready(function(){
-    $('video').bind('contextmenu',function() { return false; });
-    $('img').bind('contextmenu',function() { return false; });
-});
 const video = document.getElementById('video');
 const videoControls = document.getElementById('video-controls');
 const playButton = document.getElementById('play');

@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -43,13 +45,30 @@ public class PostService {
 	public long countUserPost(User user) {
 		return this.postRepository.countByUser(user);
 	}
-	
+
 	public Post getPostById(int id) {
 		return this.postRepository.getById(id);
 	}
 	
+	public boolean checkPostExistById(int id) {
+		return this.postRepository.existsById(id);
+	}
+
+	public List<Post> getPostByUser(User user) {
+		List<Post> list = this.postRepository.getByUser(user);
+		List<Post> reverseList = new LinkedList<Post>();
+		for(int i = list.size()-1; i>=0; i--) {
+			reverseList.add(list.get(i));
+		}
+		return reverseList;
+	}
+	
 	public Post getPostByIdAndUser(int id, User userByEmail) {
 		return this.postRepository.getByIdAndUser(id, userByEmail);
+	}
+	
+	public Post getPostByPostPath(String pathOfPost) {
+		return this.postRepository.getByPathOfPost(pathOfPost);
 	}
 	
 	public String uploadPost(User user, String caption, MultipartFile file) {
@@ -128,6 +147,23 @@ public class PostService {
 		post.setCaption(caption);
 		post.setEdit(true);
 		this.postRepository.save(post);
+		return "done";
+	}
+	
+	public String deletePost(User user, int postId) {
+		Post post = this.postRepository.getByIdAndUser(postId, user);
+		if(post==null) {
+			return "no";
+		}
+		try {
+			Files.delete(Paths.get(new ClassPathResource("static").getFile().getAbsolutePath()+
+					java.io.File.separator+"img"+
+					java.io.File.separator+"post"+
+					java.io.File.separator+post.getPathOfPost()));
+		} catch (IOException e) {
+			return "no";
+		}
+		this.postRepository.deleteById(post.getId());
 		return "done";
 	}
 	
@@ -242,5 +278,4 @@ public class PostService {
 		return true;
     }
 
-    
 }

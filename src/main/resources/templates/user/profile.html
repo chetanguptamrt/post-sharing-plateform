@@ -47,15 +47,13 @@
 				</div>
 			</div>
 			<hr class="mb-3 ml-3 mr-3 mt-1" />
-			<div th:if="${showPost}" class="row m-0">
-				<div class="col-4">
-					we
-				</div>
-				<div class="col-4">
-					we
-				</div>
-				<div class="col-4">
-					we
+			<div th:if="${showPost}" class="row m-0 p-2">
+				<div th:each="post : ${posts}" class="col-4 p-0 border profile-post">
+					<a th:href="@{|/p/${post.id}}">
+						<img th:if="${post.format=='image'}" class="img-custom" th:src="@{|/img/post/${post.pathOfPost}}" alt="post" />
+						<video th:if="${post.format=='video'}" class="img-custom" th:src="@{|/img/post/${post.pathOfPost}}" ></video>
+						<span th:if="${post.format=='video'}" class="img-video text-white"><i class="fa fa-video-camera" aria-hidden="true"></i></span>
+					</a>
 				</div>
 			</div>
 			<div th:unless="${showPost}">

@@ -31,7 +31,7 @@ public class FollowController {
 		if(principal!=null) {
 			User user = this.profileService.getUserByEmail(principal.getName());
 			User profileUser = this.profileService.getUserByUserName(username);
-			if(this.followService.ifFollowed(user, profileUser) || profileUser.getUserData().isAccountMode()) {
+			if(this.followService.ifFollowed(user, profileUser) || profileUser.getUserData().isAccountMode() || user.getId()==profileUser.getId()) {
 				List<FollowUser> list = this.followService.getUserFollowers(profileUser);
 				return ResponseEntity.ok(list);
 			}
@@ -45,7 +45,7 @@ public class FollowController {
 		if(principal!=null) {
 			User user = this.profileService.getUserByEmail(principal.getName());
 			User profileUser = this.profileService.getUserByUserName(username);
-			if(this.followService.ifFollowed(user, profileUser) || profileUser.getUserData().isAccountMode()) {
+			if(this.followService.ifFollowed(user, profileUser) || profileUser.getUserData().isAccountMode() || user.getId()==profileUser.getId()) {
 				List<FollowUser> list = this.followService.getUserFollowing(profileUser);
 				return ResponseEntity.ok(list);
 			}
