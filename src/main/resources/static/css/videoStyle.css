@@ -119,7 +119,7 @@ progress::-moz-progress-bar {
     opacity: 1;
 }
 
-button {
+.button {
     cursor: pointer;
     position: relative;
     margin-right: 7px;
@@ -130,11 +130,11 @@ button {
     background-color: transparent;
 }
 
-button * {
+.button * {
     pointer-events: none;
 }
 
-button::before {
+.button::before {
     content: attr(data-title);
     position: absolute;
     display: none;
@@ -148,7 +148,7 @@ button::before {
     white-space: pre;
 }
 
-button:hover::before {
+.button:hover::before {
     display: inline-block;
 }
 

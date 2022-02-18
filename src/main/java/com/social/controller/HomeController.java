@@ -72,6 +72,20 @@ public class HomeController {
 		return "user/people";
 	}
 	
+	@RequestMapping(value = "/notification", method = RequestMethod.GET)
+	public String notification(Principal principal, Model model) {
+		String name = principal.getName();
+		User userByEmail = this.profileService.getUserByEmail(name);
+		UserData userDataByUser = this.profileService.getUserDataByUser(userByEmail);
+		String profileImagePath = userDataByUser.getProfileImagePath();
+		model.addAttribute("user", userByEmail);
+		model.addAttribute("userProfile", profileImagePath);
+		
+		
+		return "user/notification";
+	}
+	
+	
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)
 	public String login(Model model) {
 		model.addAttribute("title", "Login | Post Sharing");
