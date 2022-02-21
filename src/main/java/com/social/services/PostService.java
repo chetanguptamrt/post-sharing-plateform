@@ -21,10 +21,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.social.entities.Notification;
 import com.social.entities.Post;
 import com.social.entities.User;
 import com.social.helper.AnimatedGifEncoder;
 import com.social.helper.GifDecoder;
+import com.social.repositories.NotificationRepository;
 import com.social.repositories.PostRepository;
 
 import ws.schild.jave.AudioAttributes;
@@ -41,6 +43,9 @@ public class PostService {
 
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private NotificationRepository notificationRepository;
 
 	public long countUserPost(User user) {
 		return this.postRepository.countByUser(user);
@@ -130,6 +135,14 @@ public class PostService {
 				post.setPathOfPost(postPath);
 				post.setUser(user);
 				this.postRepository.save(post);
+				Notification notification = new Notification();
+				notification.setDate(date);
+				notification.setIconPath(user.getUserData().getProfileImagePath());
+				notification.setRedirectUrl(post.getId()+"");
+				notification.setSeen(false);
+				notification.setText("Post Successfully Uploaded");
+				notification.setUser(user);
+				this.notificationRepository.save(notification);
 				return "done";
 			} else {
 				return "fileError";

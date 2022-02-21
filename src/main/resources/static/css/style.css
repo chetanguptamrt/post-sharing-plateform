@@ -91,6 +91,10 @@ body {
 	top: 10px;
 	font-size: large;
 }
+.link-block{
+	display: block;
+	padding: 12px 20px;
+}
 @media only screen and (max-width: 782px){
 	.nav-link-name{
 		display: none;

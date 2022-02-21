@@ -82,7 +82,7 @@ public class ProfileController {
 				followField = 1;
 			} else if(this.followService.isSendRequest(userByEmail, userByUserName)) {
 				followField = 2;
-			} else if(userByEmail.getUserName().equals(username.toLowerCase().trim())) {
+			} else if(userByEmail.getUserName().toLowerCase().equals(username.toLowerCase().trim())) {
 				followField = 5;
 				showPost = true;
 			} else if(!this.followService.ifFollowed(userByEmail, userByUserName)) {

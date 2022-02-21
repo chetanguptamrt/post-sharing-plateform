@@ -28,5 +28,16 @@ public class ProfileService {
 	public UserData getUserDataByUser(User user) {
 		return this.userDataRepository.getByUser(user);
 	}
+
+	public boolean checkUserNameAvailableOrNot(String username, User user) {
+		if(username.trim().equals(user.getUserName())) {
+			return false;
+		}
+		return this.userRepository.existsByUserName(username);
+	}
+	
+	public boolean existsUserName(String username) {
+		return this.userRepository.existsByUserName(username);
+	}
 	
 }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{user/base :: layout(~{::section})}">
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+	<section>
+	   	<div class="bg-white pt-4 pb-3">
+	   		<h3 class="text-center">Settings</h3>
+	   		<div class="row mt-3 ml-0 mr-0 mb-4">
+	   			<div class="pl-5 col-lg-4">
+	   				<ul class="list-group">
+					  	<li class="list-group-item p-0 list-group-item-dark">
+					  		<a th:href="@{/setting/account}" class="text-decoration-none text-dark link-block" >Account</a>
+					  	</li>
+					  	<li class="list-group-item p-0">
+						  	<a th:href="@{/setting/change-password}" class="text-decoration-none text-dark link-block" >Change Password</a>
+						</li>
+					  	<li class="list-group-item p-0">
+					  		<a th:href="@{/setting/like-post}" class="text-decoration-none text-dark link-block" >Post you like</a>
+					  	</li>
+					  	<li class="list-group-item p-0">
+					  		<a th:href="@{/logout}" class="text-decoration-none text-danger link-block" >Logout</a>
+					  	</li>
+					</ul>
+	   			</div>
+	   			<div class="col-lg-8">
+	   				<h5 class="text-center">Account</h5>
+   					<form id="update-profile">
+   						<div class="text-center mt-4">
+   							<img class="border rounded-pill border-dark" style="width: 125px" th:src="@{|/img/profile/${userProfile}}" alt="img" />
+   						</div>
+   						<label style="font-weight: 500;" class="mt-2" for="image">Update Profile -</label><br />
+   						<input type="file" class="border-0" name="image" id="image"/> 
+   						<button class="btn btn-sm btn-primary mt-1">Update Profile</button>
+   					</form>
+   					<div class="mt-3">
+   						<form id="edit">
+   						<label style="font-weight: 500;">Edit details -</label>
+   						<div class="text-center">
+   							<small id="edit-status" style="display: none"></small>
+   						</div>
+   						<div class="row m-0">
+   							<div class="col-6 p-0">
+   								<input type="text" class="form-control" th:value="${user.firstName}" placeholder="First Name" name="firstName" required="required"/>
+   							</div>
+   							<div class="col-6 p-0">
+   								<input type="text" class="form-control" th:value="${user.lastName}" placeholder="Last Name" name="lastName" required="required"/>
+   							</div>
+   						</div>
+   						<div class="row">
+   							<div class="col-12 mt-2">
+   								<input type="text" class="form-control" th:value="${user.userName}" placeholder="Username" id="username" name="userName" required="required"/>
+   								<small id="username-status" style="display: none;"></small>
+   							</div>
+   							<div class="col-12 mt-2">
+   								<input type="email" class="form-control" th:value="${user.email}" disabled="disabled"/>
+   							</div>
+   							<div class="col-12 mt-2">
+   								<input type="text" class="form-control" th:value="${user.userData.phone}" placeholder="Phone No." name="phone"/>
+   							</div>
+   							<div class="col-12 mt-2">
+		   						<textarea name="bio" class="form-control" placeholder="Bio..." th:text="${user.userData.bio}" rows="4"></textarea>
+   							</div>
+   							<div class="col-12 mt-2">
+   								<input type="date" class="form-control" th:value="${user.userData.dateOfBirth}" name="dob"/>
+   							</div>
+   							<div class="col-12 mt-2">
+   								<label for="gender">Gender -</label>
+   								<select name="gender" class="form-control" >
+   									<option th:selected="${user.userData.gender=='no'}" value="no">Rather Not Say</option>
+   									<option th:selected="${user.userData.gender=='male'}" value="male">Male</option>
+   									<option th:selected="${user.userData.gender=='female'}" value="female">Female</option>
+   									<option th:selected="${user.userData.gender=='other'}" value="other">Other</option>
+   								</select>
+   							</div>
+   						</div>
+						<div class="text-center mt-2">
+							<button type="submit" class="btn btn-primary">Update</button>
+						</div>
+						</form>
+   					</div>
+   					<div class="mt-3">
+   						<form id="visibility">
+	   						<label style="font-weight: 500;">Visibility-</label>
+   							<div class="text-center">
+   								<small id="visibility-status" style="display:none;"></small>
+   							</div>
+	   						<div class="custom-control custom-switch">
+							  	<input type="checkbox" th:checked="${user.userData.accountMode}?'checked'" class="custom-control-input" id="customSwitch1" name="accountMode">
+							  	<label class="custom-control-label" for="customSwitch1">Account Mode</label>
+							</div>
+	   						<div class="custom-control custom-switch">
+							  	<input type="checkbox" th:checked="${user.userData.showEmail}?'checked'" class="custom-control-input" id="customSwitch2" name="showEmail">
+							  	<label class="custom-control-label" for="customSwitch2">Show Email</label>
+							</div>
+	   						<div class="custom-control custom-switch">
+							  	<input type="checkbox" th:checked="${user.userData.showPhone}?'checked'" class="custom-control-input" id="customSwitch3" name="showPhone">
+							  	<label class="custom-control-label" for="customSwitch3">Show Phone No.</label>
+							</div>
+	   						<div class="custom-control custom-switch">
+							  	<input type="checkbox" th:checked="${user.userData.showDateOfBirth}?'checked'" class="custom-control-input" id="customSwitch4" name="showDOB">
+							  	<label class="custom-control-label" for="customSwitch4">Show Date of Birth</label>
+							</div>
+							<div class="text-center mt-2">
+								<button class="btn btn-sm btn-primary" type="submit">Update</button>
+							</div>
+						</form>
+   					</div>
+   					<div class="mt-3 p-5 border border-danger text-center rounded">
+   						<span style="font-weight: 500">Danger Zone</span> <br />
+   						<button class="btn btn-danger">Delete Account</button>
+   					</div>
+	   			</div>
+	   		</div>
+	   	</div>
+	   	<script type="text/javascript" th:src="@{/js/accountSettingScript.js}"></script>
+	</section>
+</body>
+</html>

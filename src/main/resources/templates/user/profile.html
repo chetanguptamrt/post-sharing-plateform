@@ -79,8 +79,8 @@
 				        	<div class="text-center mb-1">
 				        		<small style="color: #6c757d;">Joining date: <span th:text="${#dates.format(profileUser.joiningDate,'dd MMM yyyy')}"></span></small>
 				        	</div>
-				        	<div th:if="${profileUser.userData.showDateOfBirth && profileUser.userData.dateOfBirth}">
-				        		<label>Date Of Birth: <span th:text="${profileUser.userData.dateOfBirth}"></span></label>
+				        	<div th:if="${profileUser.userData.showDateOfBirth && profileUser.userData.dateOfBirth!=null}">
+				        		<label>Date Of Birth: <span th:text="${#dates.format(profileUser.userData.dateOfBirth, 'dd-MMM-yyyy')}"></span></label>
 				        	</div>
 				        	<div th:if="${profileUser.userData.showEmail && profileUser.email!=''}">
 				        		<label>Email: <span th:text="${profileUser.email}"></span></label>
@@ -89,7 +89,9 @@
 				        		<label>Phone: <span th:text="${profileUser.userData.phone}"></span></label>
 				        	</div>
 				        	<label>Account Mode: <span th:text="${profileUser.userData.accountMode}?'Public':'Private'"></span></label>
-				        	<label th:if="${profileUser.userData.gender!='no' && profileUser.userData.gender!=''}">Gender: <span th:text="${profileUser.userData.gender=='male'}?'Male':'Female'"></span></label>
+				        	<div th:if="${profileUser.userData.gender!='no' && profileUser.userData.gender!=''}">
+				        		<label>Gender: <span th:text="${profileUser.userData.gender=='male'}?'Male':'Female'"></span></label>
+				        	</div>
 				      	</div>
 			    	</div>
 			  	</div>
