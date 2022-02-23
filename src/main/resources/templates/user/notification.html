@@ -8,15 +8,17 @@
 	    <div class="pt-2 pb-2">
 	    	<div class="bg-white pt-3 pb-3">
 	    		<h3 class="text-center">Notification</h3>
-	    		<div th:each="n : ${notifications}" class="p-1">
-		    		<div class="border" style="display: flex;">
-	  					<a th:href="@{|/u/${n.user.userName}}" style="display: block; padding: 2px 4px">
-	  						<img th:src="@{|/img/profile/50x50_${n.user.userData.profileImagePath}}" style="width: 44px" alt="img" class="rounded-pill img-fluid border" />
-	  					</a>
-	  					<a th:href="@{|/p/${n.redirectUrl}}" style="display: block; width: 100%" href="" class="text-decoration-none text-dark pt-2 pl-2">
-	  						<span th:text="${n.text}"></span>
-	  					</a>
-		    		</div>
+	    		<div class="p-1">
+		    		<div class="border border-dark">
+			    		<div th:each="n : ${notifications}" class="border-bottom border-dark" style="display: flex;" th:styleappend="${!n.seen}?'background-color: #d0ddff;'" >
+		  					<a th:href="@{|/u/${n.user.userName}}" style="display: block; padding: 4px 4px">
+		  						<img th:src="@{|/img/profile/50x50_${n.user.userData.profileImagePath}}" style="width: 44px" alt="img" class="rounded-pill img-fluid border" />
+		  					</a>
+		  					<a th:href="@{|/p/${n.redirectUrl}}" style="display: block; width: 100%" href="" class="text-decoration-none text-dark pt-2 pl-2">
+		  						<span th:text="${n.text}"></span>
+		  					</a>
+			    		</div>
+			    	</div>
 		    	</div>
 	    		<div class="text-center m-2"><small>End of Notification</small></div>
 	    	</div>

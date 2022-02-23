@@ -1,4 +1,28 @@
 $(document).ready(function(){
+	$("#update-profile").on("submit",function(event){
+        event.preventDefault();
+        var form = $("#update-profile")[0];
+        var formData = new FormData(form);
+        $.ajax({
+            url: "/setting/update-pics",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+           success: function(data){
+				if(data.trim()==="done"){
+					location.reload();
+				} else if(data.trim()==="invalidFileType"){
+					alert("Please select only jpeg, png format.");
+				} else {
+	             	alert("Something went wrong!!");	
+				}
+            },
+            error: function(){
+			alert("Something went wrong. Please try again later.");
+            }
+        });
+    });
 	$("#username").on("keyup",function(){
 		if(this.value!=="") {
 	        $("#username-status").show();
@@ -97,4 +121,21 @@ $(document).ready(function(){
 			}
 		});
 	});
+	$("#delete").on("click",function(){
+		if(confirm("Are you sure?"))
+        $.ajax({
+            url: "/setting/account-delete",
+            type: "POST",
+           success: function(data){
+				if(data.trim()==="done"){
+					location.href = "/logout";
+				} else {
+	             	alert("Something went wrong!!");	
+				}
+            },
+            error: function(){
+				alert("Something went wrong. Please try again later.");
+            }
+        });
+    });
 });

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.social.entities.User;
 import com.social.entities.UserData;
@@ -40,6 +41,15 @@ public class SettingsController {
 		model.addAttribute("user", userByEmail);
 		model.addAttribute("userProfile", profileImagePath);
 		return "user/setting/account";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/setting/update-pics", method = RequestMethod.POST)
+	public String updateProfilePics(@RequestParam("image") MultipartFile file, Principal principal) {
+		String name = principal.getName();
+		User user = this.profileService.getUserByEmail(name);
+		String done = this.settingService.updateProfilePic(user, file);
+		return done;
 	}
 	
 	@ResponseBody
@@ -102,12 +112,22 @@ public class SettingsController {
 		model.addAttribute("userProfile", profileImagePath);
 		return "user/setting/changePassword";
 	}
-	
+
+	@ResponseBody
 	@RequestMapping(value = "/setting/update-password", method = RequestMethod.POST)
 	public String updatePassword(@RequestParam("oPassword") String oldPassword,@RequestParam("nPassword") String newPassword, Principal principal) {
 		String name = principal.getName();
 		User user = this.profileService.getUserByEmail(name);
 		String done = this.settingService.updatePassword(user, oldPassword, newPassword);
+		return done;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/setting/account-delete", method = RequestMethod.POST)
+	public String updatePassword(Principal principal) {
+		String name = principal.getName();
+		User user = this.profileService.getUserByEmail(name);
+		String done = this.settingService.deleteAccount(user);
 		return done;
 	}
 	
