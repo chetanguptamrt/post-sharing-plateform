@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers("/setting/**", "/post/**","/profile", "/notification", "/people", "/get-user/**").hasRole("USER")			//setting page
+			.antMatchers("/setting/**", "/post/**","/profile", "/notification", "/people", "/get-user/**", "/search", "/load-home").hasRole("USER")			//setting page
 			.antMatchers("/**","/u/**","/p/**").permitAll() 	//u for user page, p for post page
 			.and().formLogin().loginPage("/signin")
 			.and().logout().deleteCookies("JSESSIONID").invalidateHttpSession(true)

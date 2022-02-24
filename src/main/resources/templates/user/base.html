@@ -19,7 +19,10 @@
 					<span class="badge badge-primary nav-link-icon">P<sub style="font-size: 16px">s</sub></span><span class="nav-link-name"> Post Sharing</span>
 				</a>
 				<div class="pt-1 nav-header-div">
-					<input type="text" class="form-control" placeholder="Search..." />
+					<input type="text" class="form-control" placeholder="Search..." id="search" />
+					<div style="position: absolute; width: 400px">
+						<div style="position: relative; background-color: white; max-width: 400px; margin:auto; display: none;" id="show-search"></div>
+					</div>
 				</div>
 			</div>
 			<div th:unless="${user}" style="padding: 4px 8px;">
@@ -94,11 +97,6 @@
 			</div>
 	    </div>
 	</footer>
-	<script type="text/javascript">
-		$(document).ready(function(){
-		    $('video').bind('contextmenu dragstart',function() { return false; });
-		    $('img').bind('contextmenu dragstart',function() { return false; });
-		});
-	</script>
+	<script type="text/javascript" th:src="@{/js/mainScript.js}"></script>
 </body>
 </html>

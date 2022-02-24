@@ -8,13 +8,13 @@
 		<div class="pt-3">
 		   <div class="bg-white pt-4 pb-4 pl-2 pr-2 m-0 row">
 		    	<div class="col-md-8 offset-md-2 p-mar">
-			    		<div class="post">
+			    	<div class="post">
 			    		<div class="row mt-2 mb-2 ml-1 mr-1">
 			    			<div class="col-10 pl-2">
 				    			<a th:href="@{|/u/${profileUser.userName}}" class="text-dark text-decoration-none" style="cursor: pointer; display: block" target="_blank">
 					    			<img th:src="@{|/img/profile/50x50_${profileUserProfile}}" class="rounded-pill border" style="width: 42px;" alt="img" />
 					    			<label th:text="${profileUser.firstName+' '+profileUser.lastName}" style="font-size: larger; font-weight: 500;"></label>
-					    			<small class="text-danger">(edited)</small>
+					    			<small th:if="${post.edit}" class="text-danger">(edited)</small>
 				    			</a>
 				    		</div>
 				    		<div class="col-2 text-right">

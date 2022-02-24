@@ -95,6 +95,11 @@ body {
 	display: block;
 	padding: 12px 20px;
 }
+@media only screen and (max-width: 991px){
+	.home-profile{
+		display: none;
+	}
+}
 @media only screen and (max-width: 782px){
 	.nav-link-name{
 		display: none;

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,11 +22,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.social.entities.Follow;
 import com.social.entities.Notification;
 import com.social.entities.Post;
 import com.social.entities.User;
 import com.social.helper.AnimatedGifEncoder;
 import com.social.helper.GifDecoder;
+import com.social.helper.HomePost;
+import com.social.repositories.FollowRepository;
+import com.social.repositories.LikeRepository;
 import com.social.repositories.NotificationRepository;
 import com.social.repositories.PostRepository;
 
@@ -45,7 +50,43 @@ public class PostService {
 	private PostRepository postRepository;
 	
 	@Autowired
+	private LikeRepository likeRepository;
+	
+	@Autowired
 	private NotificationRepository notificationRepository;
+	
+	@Autowired
+	private FollowRepository followRepository;
+
+	public List<HomePost> getHomePost(User user, int pageNo) {
+		List<Follow> following = this.followRepository.getByFollowByUser(user);
+		List<Integer> posts = new LinkedList<Integer>();
+		following.forEach(f->{
+			User u = f.getFollowedToUser();
+			List<Post> byUser = this.postRepository.getByUser(u);
+			byUser.forEach(p->{
+				posts.add(p.getId());
+			});
+		});
+		Collections.sort(posts);
+		List<HomePost> list = new LinkedList<HomePost>();
+		for(int i = posts.size()-1-(10*(pageNo-1)), k=1; i>=0 && k<=10; i--, k++) {
+			Post post = this.getPostById(posts.get(i));
+			User user2 = post.getUser();
+			HomePost homePost = new HomePost();
+			homePost.setCaption(post.getCaption());
+			homePost.setEdit(post.isEdit());
+			homePost.setFormat(post.getFormat());
+			homePost.setPathOfPost(post.getPathOfPost());;
+			homePost.setId(post.getId());
+			homePost.setName(user2.getFirstName()+" "+user2.getLastName());
+			homePost.setProfile(user2.getUserData().getProfileImagePath());
+			homePost.setTotalLikes(this.likeRepository.countByPost(post));
+			homePost.setUsername(user2.getUserName());
+			list.add(homePost);
+		}
+		return list;
+	}
 
 	public long countUserPost(User user) {
 		return this.postRepository.countByUser(user);

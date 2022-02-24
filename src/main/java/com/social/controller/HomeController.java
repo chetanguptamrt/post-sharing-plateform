@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.social.entities.Notification;
 import com.social.entities.User;
 import com.social.entities.UserData;
+import com.social.helper.HomePost;
+import com.social.helper.SearchUser;
 import com.social.services.FollowService;
 import com.social.services.NotificationService;
+import com.social.services.PostService;
 import com.social.services.ProfileService;
 import com.social.services.UserService;
 
@@ -31,6 +35,9 @@ public class HomeController {
 	
 	@Autowired
 	private FollowService followService;
+	
+	@Autowired
+	private PostService postService;
 	
 	@Autowired
 	private NotificationService notificationService;
@@ -48,6 +55,22 @@ public class HomeController {
 		model.addAttribute("user", userByEmail);
 		model.addAttribute("userProfile", profileImagePath);
 		return "user/home";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/load-home", method = RequestMethod.GET)
+	public ResponseEntity<List<HomePost>> getHome(@RequestParam("page") int pageNo, Principal principal) {
+		String name = principal.getName();
+		User user = this.profileService.getUserByEmail(name);
+		List<HomePost> list = this.postService.getHomePost(user, pageNo);
+		return ResponseEntity.ok(list);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public ResponseEntity<List<SearchUser>> search(@RequestParam("q") String search) {
+		List<SearchUser> list = this.userService.searchUser(search);
+		return ResponseEntity.ok(list);
 	}
 	
 	@RequestMapping(value = "/people", method = RequestMethod.GET)

@@ -5,12 +5,46 @@
 </head>
 <body>
 	<section>
-	    <p>Page content</p>
-	    <div>Included on page</div>
-	    <p>Page content</p>
-	    <div>Included on page</div>
-	    <p>Page content</p>
-	    <div>Included on page</div>
+	    
+	   	<div class="bg-white pt-4 pb-3">
+	   		<h3 class="text-center">Settings</h3>
+	   		<div class="row mt-3 ml-0 mr-0 mb-4">
+	   			<div class="pl-5 col-md-4 col-12">
+	   				<ul class="list-group">
+					  	<li class="list-group-item p-0">
+					  		<a th:href="@{/setting/account}" class="text-decoration-none text-dark link-block" >Account</a>
+					  	</li>
+					  	<li class="list-group-item p-0">
+						  	<a th:href="@{/setting/change-password}" class="text-decoration-none text-dark link-block" >Change Password</a>
+						</li>
+					  	<li class="list-group-item p-0 list-group-item-dark">
+					  		<a th:href="@{/setting/like-post}" class="text-decoration-none text-dark link-block" >Post you like</a>
+					  	</li>
+					  	<li class="list-group-item p-0">
+					  		<a th:href="@{/logout}" class="text-decoration-none text-danger link-block" >Logout</a>
+					  	</li>
+					</ul>
+	   			</div>
+	   			<div class="col-md-8 col-12">
+	   				<div class="row m-0" id="like-post">
+   						<div th:each="like : ${likes}" class="col-3 p-0 border profile-post">
+							<a th:href="@{|/p/${like.post.id}}">
+								<img th:if="${like.post.format=='image'}" class="img-custom" th:src="@{|/img/post/${like.post.pathOfPost}}" alt="post" />
+								<video th:if="${like.post.format=='video'}" class="img-custom" th:src="@{|/img/post/${like.post.pathOfPost}}" ></video>
+								<span th:if="${like.post.format=='video'}" class="img-video text-white"><i class="fa fa-video-camera" aria-hidden="true"></i></span>
+							</a>
+						</div>
+	   				</div>
+	   				<div class="text-center mt-2" th:if="${page.totalElements>page.size}" >
+	   					<button id="load" class="btn btn-sm btn-primary">Load more</button>
+	   				</div>
+	   				<div class="text-center" th:if="${page.totalElements==0}" >
+	   					<h3 class="mt-3">No posts like</h3>
+	   				</div>
+	   			</div>
+	   		</div>
+	   	</div>
+	   	<script th:src="@{/js/settingLikePost.js}"></script>
 	</section>
 </body>
 </html>

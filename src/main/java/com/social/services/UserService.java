@@ -1,6 +1,8 @@
 package com.social.services;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,6 +12,7 @@ import com.social.entities.AccountActivation;
 import com.social.entities.Forgot;
 import com.social.entities.User;
 import com.social.entities.UserData;
+import com.social.helper.SearchUser;
 import com.social.repositories.AccountActivationRepository;
 import com.social.repositories.ForgotRepository;
 import com.social.repositories.UserRepository;
@@ -133,6 +136,19 @@ public class UserService {
 
 	private String getRandom() {
 		return String.valueOf((int) (Math.random()*(999999-111111+1)+111111));
+	}
+
+	public List<SearchUser> searchUser(String search) {
+		List<User> list = this.userRepository.findTop10ByFirstNameOrLastNameOrUserNameContaining(search, search, search);
+		List<SearchUser> sUsers = new LinkedList<SearchUser>();
+		list.forEach(u->{
+			SearchUser sUser = new SearchUser();
+			sUser.setName(u.getFirstName()+" "+u.getLastName());
+			sUser.setProfile(u.getUserData().getProfileImagePath());
+			sUser.setUsername(u.getUserName());
+			sUsers.add(sUser);
+		});
+		return sUsers;
 	}
 	
 }

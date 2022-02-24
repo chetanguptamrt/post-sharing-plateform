@@ -19,7 +19,7 @@ public class NotificationService {
 	public List<Notification> getNotifications(User user){
 		List<Notification> list = this.notificationRepository.getByUser(user);
 		List<Notification> reverse = new LinkedList<Notification>();
-		for(int i=list.size()-1; i>=0; i++) {
+		for(int i=list.size()-1; i>=0; i--) {
 			reverse.add(list.get(i));
 		}
 		return reverse;

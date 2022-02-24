@@ -5,12 +5,16 @@
 </head>
 <body>
 	<section>
-	    <p>Page content</p>
-	    <div>Included on page</div>
-	    <p>Page content</p>
-	    <div>Included on page</div>
-	    <p>Page content</p>
-	    <div>Included on page</div>
+		<div class="row bg-white pt-2 pb-4 m-0">
+	 		<div class="col-lg-8" id="home-post" >
+	 			
+	 		</div>
+	 		<div class="col-lg-4 pt-4 pb-4 home-profile text-center">
+	 			<img th:src="@{|/img/profile/${userProfile}}" style="width: 120px" alt="img" class="rounded-pill border"/> <br />
+	 			<a th:href="@{/profile}" class="btn btn-primary btn-sm mt-2">View Profile</a>
+	 		</div>
+	 	</div>
+	 	<script type="text/javascript" th:src="@{/js/homeScript.js}"></script>
 	</section>
 </body>
 </html>
