@@ -1,5 +1,5 @@
 # post-sharing-plateform
- Post sharing plateform
+ small social media plateform project
 
 ### Technology
 * Front-end - HTML, CSS, JavaScript
